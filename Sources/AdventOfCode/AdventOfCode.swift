@@ -1,3 +1,1 @@
-struct AdventOfCode {
-    var text = "Hello, World!"
-}
+struct AdventOfCode {}
