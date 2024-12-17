@@ -1,0 +1,26 @@
+import Algorithms
+import Utilities
+import Foundation
+
+var timer = Date()
+var input = try load(from: .module)
+
+// MARK: Parsing
+
+
+
+parsing(&timer)
+
+// MARK: Part 1
+
+
+
+let p1 = 0
+part1(p1, &timer)
+
+// MARK: Part 2
+
+
+
+let p2 = 0
+part2(p2, &timer)
