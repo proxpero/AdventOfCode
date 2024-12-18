@@ -1,25 +1,26 @@
 import Algorithms
 
 public struct Grid<Element> {
-    public let width: Int
-    public let height: Int
+    private var pointSpace: PointSpace
     public var elements: [[Element]]
-    private let zero = Point(row: 0, col: 0)
 
     public init(rows: [[Element]]) {
-        self.width = rows.first?.count ?? 0
-        self.height = rows.count
+        assert(!rows.isEmpty)
+        self.pointSpace = PointSpace(
+            width: rows[0].count,
+            height: rows.count
+        )
         self.elements = rows
     }
 }
 
 public extension Grid {
-    var minCol: Int { zero.col }
-    var maxCol: Int { zero.col + width - 1 }
-    var minRow: Int { zero.row }
-    var maxRow: Int { zero.row + height - 1 }
-    var rowRange: Range<Int> { minRow..<(maxRow + 1) }
-    var colRange: Range<Int> { minCol..<(maxCol + 1) }
+    var minCol: Int { pointSpace.minCol }
+    var maxCol: Int { pointSpace.maxCol }
+    var minRow: Int { pointSpace.minRow }
+    var maxRow: Int { pointSpace.maxRow }
+    var rowRange: Range<Int> { pointSpace.rowRange }
+    var colRange: Range<Int> { pointSpace.colRange }
 
     subscript(row row: Int, column col: Int) -> Element {
         get { elements[row - minRow][col - minCol] }
@@ -40,39 +41,23 @@ public extension Grid {
     }
 
     var points: [Point] {
-        Array(product(rowRange, colRange).map { Point(row: $0.0, col: $0.1) })
+        pointSpace.points
     }
 
     func points(from start: Point, direction: Direction) -> some Sequence<Point> {
-        PointSequence(rowRange: rowRange, columnRange: colRange, direction: direction, current: start)
+        pointSpace.points(from: start, direction: direction)
     }
 
     func nextPoint(origin: Point, direction: Direction, distance: Int = 1) -> Point {
-        origin.offset(by: direction.offsets * distance)
+        pointSpace.nextPoint(origin: origin, direction: direction, distance: distance)
     }
 
     func contains(point: Point) -> Bool {
-        (minRow...maxRow) ~= point.row && (minCol...maxCol) ~= point.col
+        pointSpace.contains(point: point)
     }
-}
 
-extension Grid {
-    struct PointSequence: Sequence, IteratorProtocol {
-        let rowRange: Range<Int>
-        let columnRange: Range<Int>
-
-        var direction: Direction
-        var current: Point
-
-        mutating func next() -> Point? {
-            let result = current
-            guard rowRange ~= result.row && columnRange ~= result.col else {
-                return nil
-            }
-            let next = current.offset(by: direction.offsets)
-            current = next
-            return result
-        }
+    func validNeighbors(of point: Point, includeDiagonals: Bool = false) -> Set<Point> {
+        pointSpace.validNeighbors(of: point, includeDiagonals: includeDiagonals)
     }
 }
 
