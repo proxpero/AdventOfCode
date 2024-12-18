@@ -3,7 +3,7 @@ import Foundation
 
 public struct Day {
     let year: Year
-    let day: Int
+    public let day: Int
 
     public init(year: Int, day: Int) {
         self.year = Year(year: year)

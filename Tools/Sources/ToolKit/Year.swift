@@ -16,6 +16,14 @@ public extension Year {
         }
     }
 
+    var existingDays: [Day] {
+        get throws {
+            try folder.subfolders
+                .filter { $0.name.hasPrefix("Day") }
+                .map { Day(year: year, day: Int($0.name.dropFirst("Day".count))!) }
+        }
+    }
+
     var playgroundName: String {
         "AOC\(year).playground"
     }

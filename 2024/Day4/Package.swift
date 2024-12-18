@@ -7,14 +7,14 @@ let package = Package(
     platforms: [.macOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-algorithms.git", .upToNextMajor(from: "1.2.0")),
-        .package(path: "../../CoreAOC")
+        .package(path: "../../Utilities")
     ],
     targets: [
         .executableTarget(
             name: "Day4",
             dependencies: [
                 .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "Utilities", package: "CoreAOC")
+                .product(name: "Utilities", package: "Utilities")
             ],
             resources: [.copy("Input")]
         )

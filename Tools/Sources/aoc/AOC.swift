@@ -7,7 +7,15 @@ import ToolKit
 struct AOC: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "Tools for Advent of Code",
-        subcommands: [Auth.self, Init.self, LoadInput.self, Rebuild.self, Run.self, Open.self]
+        subcommands: [
+            Auth.self,
+            Init.self,
+            LoadInput.self,
+            Rebuild.self,
+            Run.self,
+            Open.self,
+            UpdatePackage.self
+        ]
     )
 }
 
@@ -109,6 +117,15 @@ struct Init: ParsableCommand {
     }
 }
 
+struct UpdatePackage: ParsableCommand {
+    func run() throws {
+        let year = Year(year: 2024)
+        for day in try year.existingDays {
+            try day.createPackageFile()
+        }
+    }
+}
+
 struct LoadInput: ParsableCommand {
     @Argument var year: Int
     @Argument var day: Int
@@ -120,8 +137,8 @@ struct LoadInput: ParsableCommand {
 
 struct Rebuild: ParsableCommand {
     func run() throws {
-        try shellOut(to: "swift build -c release", at: "./CoreAOC")
-        try shellOut(to: .copyFile(from: "./CoreAOC/.build/release/aoc", to: "."))
+        try shellOut(to: "swift build -c release", at: "./Tools")
+        try shellOut(to: .copyFile(from: "./Tools/.build/release/aoc", to: "."))
     }
 }
 
